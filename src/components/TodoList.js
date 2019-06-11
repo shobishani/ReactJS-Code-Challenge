@@ -4,14 +4,29 @@ import styled from 'styled-components'
 
 import TodoItem from './TodoItem'
 
-const TodoList = ({ items, toggleComplete }) => (
+const TodoList = ({items, toggleComplete, toggleActive, removeTodo}) => (
   <Wrapper>
     {items.map(item => {
       const onComplete = e => {
         toggleComplete(item.id)
       }
 
-      return <TodoItem key={item.id} {...item} onComplete={onComplete} />
+      const onActive = e => {
+        e.preventDefault();
+        toggleActive(item.id)
+      }
+
+      const onRemove = e => {
+        e.preventDefault();
+        removeTodo(item.id)
+      }
+
+      return <TodoItem
+        key={item.id} {...item}
+        onComplete={onComplete}
+        onActive={onActive}
+        onRemove={onRemove}
+      />
     })}
   </Wrapper>
 )

@@ -4,8 +4,10 @@ import styled from 'styled-components'
 
 const AddTodo = ({ onAddTodo }) => {
   const handleKeyPress = e => {
+    debugger;
     if (e.key === 'Enter') {
       onAddTodo(e.target.value)
+      e.target.value = ''
     }
   }
 
