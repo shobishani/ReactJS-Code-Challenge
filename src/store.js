@@ -95,6 +95,7 @@ class TodosContainer extends Container {
       return {...this.state, lists}
     })
   }
+
   toggleComplete = async (listId, id) => {
 
     const {lists} = this.state;
@@ -145,6 +146,8 @@ class TodosContainer extends Container {
   }
 
   createTodo = async (id, text) => {
+    if ( !id || !text ) return;
+    if( isNaN(id)) throw new Error('Id cant be string')
     const {lists} = this.state
 
     await this.setState(state => {
