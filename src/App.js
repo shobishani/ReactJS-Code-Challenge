@@ -1,43 +1,61 @@
 import React from 'react'
 import { Provider, Subscribe } from 'unstated'
+import { Accordion, Icon } from 'semantic-ui-react'
 
 import styled from 'styled-components'
 
 import TodosContainer from './store'
 
-import TodoList from './components/TodoList'
-import AddTodo from './components/AddTodo'
+import Todos from "./Todos";
+import AddList from "./components/AddList";
 
 function App() {
   return (
     <Provider>
       <Wrapper>
-        <Subscribe to={[ TodosContainer ]}>
-          {todos => {
-            const list = todos.getList()
-            const onUpdateFilter = e => {
-              e.preventDefault();
-              todos.updateFilter(e.target.value)
-            }
+        <Accordion>
+          <Subscribe to={[ TodosContainer ]}>
+            {store => {
+              const lists = store.getList()
+              const activeIndex = store.getActiveIndex();
+              const handleClick = (e, titleProps) => {
+                store.onUpdateAccordianActive(e, titleProps);
+              }
+              return (
+                <React.Fragment>
+                  <AddList onAddToList={store.onAddToList}/>
+                  {lists.map(list => {
+                    return (
+                      <AccWrapper key={list.id}>
+                        <Accordion.Title
+                          active={activeIndex === list.id}
+                          index={list.id}
+                          onClick={handleClick}>
+                          <IconWrapper name='dropdown'/>
+                          <AccordianTitle>{list.name}</AccordianTitle>
+                        </Accordion.Title>
+                        <Accordion.Content
+                          active={activeIndex === list.id}>
+                          <Todos
+                            key={list.id}
+                            id={list.id}
+                            createTodo={store.createTodo}
+                            list={list.todos}
+                            toggleComplete={store.toggleComplete}
+                            toggleActive={store.toggleActive}
+                            removeTodo={store.removeTodo}
+                          />
+                        </Accordion.Content>
+                      </AccWrapper>
+                    )
+                  })}
+                </React.Fragment>
+              )
 
-            return (
-              <TodosWrapper>
-                <AddTodo onAddTodo={todos.createTodo}/>
-                <Filter onChange={onUpdateFilter}>
-                  <option value="all">all</option>
-                  <option value="active">active</option>
-                  <option value="completed">completed</option>
-                </Filter>
-                <TodoList
-                  items={list}
-                  toggleComplete={todos.toggleComplete}
-                  toggleActive={todos.toggleActive}
-                  removeTodo={todos.removeTodo}
-                />
-              </TodosWrapper>
-            )
-          }}
-        </Subscribe>
+
+            }}
+          </Subscribe>
+        </Accordion>
       </Wrapper>
     </Provider>
   )
@@ -54,22 +72,17 @@ const Wrapper = styled.div`
   color: white;
 `
 
-const TodosWrapper = styled.div`
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-`
-
-const Filter = styled.select`
-  padding: 8px;
-  width: 538px;
+const AccordianTitle = styled.span`
   color: white;
-  border: transparent;
-  border-radius: 4px;
-  background: #3b4049;
-  :hover {
-    background: #5a626c;
-  }
 `;
+
+const IconWrapper = styled(Icon)`
+  color: white;
+`;
+
+const AccWrapper = styled.div`
+  min-width: 500px;
+`;
+
 
 export default App

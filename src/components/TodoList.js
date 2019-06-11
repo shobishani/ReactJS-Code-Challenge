@@ -6,7 +6,7 @@ import TodoItem from './TodoItem'
 
 const TodoList = ({items, toggleComplete, toggleActive, removeTodo}) => (
   <Wrapper>
-    {items.map(item => {
+    {items && items.map(item => {
       const onComplete = e => {
         toggleComplete(item.id)
       }
@@ -28,6 +28,7 @@ const TodoList = ({items, toggleComplete, toggleActive, removeTodo}) => (
         onRemove={onRemove}
       />
     })}
+    {!items.length && <EmptySpan>No tod's available</EmptySpan>}
   </Wrapper>
 )
 
@@ -35,5 +36,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 `
+
+const EmptySpan = styled.span`
+  color: red;
+  padding: 10px;
+`;
 
 export default TodoList

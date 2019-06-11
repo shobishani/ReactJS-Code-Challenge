@@ -2,11 +2,11 @@ import React from 'react'
 
 import styled from 'styled-components'
 
-const AddTodo = ({ onAddTodo }) => {
+const AddList = ({ onAddToList }) => {
   const handleKeyPress = e => {
 
     if (e.key === 'Enter') {
-      onAddTodo(e.target.value)
+      onAddToList(e.target.value)
       e.target.value = ''
     }
   }
@@ -15,7 +15,7 @@ const AddTodo = ({ onAddTodo }) => {
     <Input
       type='text'
       onKeyPress={handleKeyPress}
-      placeholder='Add new todo...'
+      placeholder='Add new list'
     />
   )
 }
@@ -36,4 +36,4 @@ const Input = styled.input`
   }
 `
 
-export default AddTodo
+export default AddList
